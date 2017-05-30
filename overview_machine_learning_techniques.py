@@ -35,9 +35,16 @@ pca_tune=pca.transform(tune_x_sample)
 pca_test=pca.transform(test_x_sample)
 pca_train=pca.transform(train_x_sample)
 
-#best error prediction was around .1 for clean, .2 for noisy
+#Linear SVM to predict the data
 
-best_error_tune, pred = linear_svm(pca_train, train_y_sample, pca_tune, tune_y_sample, pca_tune, 0)
+lin_clf=svm.SVC(C=.1, kernel="linear")
+lin_clf.fit(pca_train, train_y_sample)
+pred=lin_clf.predict(pca_tune)
+svm_error_tune=np.mean(pred != tune_y_sample)
+print("Tune error %f" % (svm_error_tune))
+pred=lin_clf.predict(pca_test)
+
+#best error prediction was around .1 for clean, .2 for noisy
 
 #Isomapping the data, see plot for identifying idea number of clusters
 
