@@ -54,7 +54,14 @@ train_iso = clf.transform(train_x_sample)
 tune_iso = clf.transform(tune_x_sample)
 test_iso = clf.transform(test_x_sample)
 
-best_error_tune, pred = linear_svm(train_iso, train_y_sample, tune_iso, tune_y_sample, test_iso, 0)
+#Linear SVM to predict the data
+
+lin_clf=svm.SVC(C=.1, kernel="linear")
+lin_clf.fit(train_iso, train_y_sample)
+pred=lin_clf.predict(tune_iso)
+svm_error_tune=np.mean(pred != tune_y_sample)
+print("Tune error %f" % (svm_error_tune))
+pred=lin_clf.predict(test_iso)
 
 #t-SNE implementation is below, and it does not seem to be highly successful, best error is .5 on the train set
 
@@ -63,7 +70,14 @@ z_tsne_train=tsne.fit_transform( np.asfarray(train_x_sample[::50], dtype="float"
 z_tsne_tune=tsne.fit_transform( np.asfarray(tune_x_sample[::10], dtype="float") )
 z_tsne_test=tsne.fit_transform( np.asfarray(test_x_sample[::10], dtype="float") )
 
-best_error_tune, pred = linear_svm(z_tsne_train, train_y_sample[::50], z_tsne_tune, tune_y_sample[::10], z_tsne_test, 0)
+#Linear SVM to predict the data
+
+lin_clf=svm.SVC(C=.1, kernel="linear")
+lin_clf.fit(z_tsne_train, train_y_sample[::50])
+pred=lin_clf.predict(z_tsne_tune)
+svm_error_tune=np.mean(pred != tune_y_sample[::10])
+print("Tune error %f" % (svm_error_tune))
+pred=lin_clf.predict(z_tsne_test)
 
 # A very crude MDS implementation is below, that simply calculates the difference between each average image and tries to get the answer.
 #accuracy is about .5 just straight up, but higher if SVM is attempted. Note there's no learning here, so train is as good as test.
