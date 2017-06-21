@@ -29,3 +29,18 @@ fraud['country']=country_id_final
 
 fraud['device_usage']=fraud['device_id'].map(fraud['device_id'].value_counts())
 fraud['ip_usage']=fraud['ip_address'].map(fraud['ip_address'].value_counts())
+
+train,test=sklearn.model_selection.train_test_split(fraud, test_size=.2, stratify=fraud['class'])
+
+cols_to_use=['purchase_value', 'source', 'browser', 'sex', 'age', 'time_to_purchase', 'country', 'device_usage']
+
+train_X=train[cols_to_use]
+
+for i in cols_to_use:
+    if fraud[i].dtype=='object':
+        fraud[i+'_codes']=pd.Categorical(fraud[i]).codes
+        cols_to_use[i].replace(i+'_codes')
+
+
+train_Y=train['class']
+
