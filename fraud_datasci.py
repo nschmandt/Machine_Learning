@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import time
 
-os.chdir('/home/nick/metis_datasci')
+os.chdir('/home/nick/fraud_datasci')
 
 fraud=pd.read_csv('Fraud_Data.csv')
 country_ip=pd.read_csv('IpAddress_to_Country.csv')
